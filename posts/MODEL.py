@@ -2,36 +2,35 @@
 # coding: utf-8
 
 
-from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
 from sklearn.naive_bayes import GaussianNB
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split  
+from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
 from sklearn.svm import SVC
+
+import nltk
+import string 
+import re
+
+
 
 
 import sys
 import tweepy
-import nltk
-import string 
-import re
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split  
-
-
-
-
-
 import numpy as np
 import pandas as pd
+import nltk
+from sklearn.svm import SVC
 
 
-# In[ ]:
 
-
-raw=pd.read_csv("sih/data.csv")
+raw=pd.read_csv("./data.csv")
 raw['Tweet']=raw.Tweet.apply(lambda x:x.replace('.',''))
 raw.head()
 
 raw.shape[0]
+
 
 
 
@@ -72,77 +71,68 @@ for x in Tweet:
     s=s.lstrip()
     c.append(s)
 
-print(c)
+# print(c)
 
 
-# In[ ]:
+# from sklearn.feature_extraction.text import CountVectorizer
+# 
+# cv = CountVectorizer(min_df=0., max_df=1.)
+# # have given min_document_freqn = 0.0 ->  which means ignore 
+# # terms that appear in less than 1% of the documents 
+# 
+# # and max_document_freqn = 1.0 ->  which means ignore terms that appear 
+# # in more than 100% of the documents".
+# # In short nothing is to be ignored. all data values would be considered 
+# 
+# cv_matrix = cv.fit_transform(c)
+# 
+# cv_matrix = cv_matrix.toarray()
+# 
+# cv_matrix
 
-
-
-cv = CountVectorizer(min_df=0., max_df=1.)
-# have given min_document_freqn = 0.0 ->  which means ignore 
-# terms that appear in less than 1% of the documents 
-
-# and max_document_freqn = 1.0 ->  which means ignore terms that appear 
-# in more than 100% of the documents".
-# In short nothing is to be ignored. all data values would be considered 
-
-cv_matrix = cv.fit_transform(c)
-
-cv_matrix = cv_matrix.toarray()
-
-cv_matrix
-
-
-# In[ ]:
-
-
-
-
-
-# the final preprocessing step is to divide data into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(cv_matrix, Labels, test_size = 0.20,random_state=0)
-
-# TYPE your Code here
-# Training the Algorithm. Here we would use simple SVM , i.e linear SVM
-#simple SVM
-
-svclassifier=SVC(kernel='linear')
-
-
-
-# classifying linear data
-
-
-# kernel can take many values like
-# Gaussian, polynomial, sigmoid, or computable kernel
-# fit the model over data
-
-svclassifier.fit(X_train,y_train)
-
-
-# Making Predictions
-
-y_pred=svclassifier.predict(X_test)
-
-
-# Evaluating the Algorithm
-
-
-print(confusion_matrix(y_test,y_pred))
-
-print(classification_report(y_test,y_pred))
-
-print(accuracy_score(y_test,y_pred))
-
-# Remember : for evaluating classification-based ML algo use  
-# confusion_matrix, classification_report and accuracy_score.
-# And for evaluating regression-based ML Algo use Mean Squared Error(MSE), ...
-
-
-# In[ ]:
-
-
+# 
+# 
+# 
+# # the final preprocessing step is to divide data into training and test sets
+# from sklearn.model_selection import train_test_split  
+# X_train, X_test, y_train, y_test = train_test_split(cv_matrix, Labels, test_size = 0.20,random_state=0)
+# 
+# # TYPE your Code here
+# # Training the Algorithm. Here we would use simple SVM , i.e linear SVM
+# #simple SVM
+# 
+# from sklearn.svm import SVC
+# svclassifier=SVC(kernel='linear')
+# 
+# 
+# 
+# # classifying linear data
+# 
+# 
+# # kernel can take many values like
+# # Gaussian, polynomial, sigmoid, or computable kernel
+# # fit the model over data
+# 
+# svclassifier.fit(X_train,y_train)
+# 
+# 
+# # Making Predictions
+# 
+# y_pred=svclassifier.predict(X_test)
+# 
+# 
+# # Evaluating the Algorithm
+# 
+# from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+# 
+# print(confusion_matrix(y_test,y_pred))
+# 
+# print(classification_report(y_test,y_pred))
+# 
+# print(accuracy_score(y_test,y_pred))
+# 
+# # Remember : for evaluating classification-based ML algo use  
+# # confusion_matrix, classification_report and accuracy_score.
 
 
 tv = TfidfVectorizer(min_df=0., max_df=1., use_idf=True)
@@ -185,17 +175,17 @@ svclassifier.fit(X_train,y_train)
 
 y_pred=svclassifier.predict(X_test)
 
-print(y_pred)
+# print(y_pred)
 
 
 # Evaluating the Algorithm
 
 
-print(confusion_matrix(y_test,y_pred))
+# print(confusion_matrix(y_test,y_pred))
 
-print(classification_report(y_test,y_pred))
+# print(classification_report(y_test,y_pred))
 
-print(accuracy_score(y_test,y_pred))
+# print(accuracy_score(y_test,y_pred))
 
 # Remember : for evaluating classification-based ML algo use  
 # confusion_matrix, classification_report and accuracy_score.
@@ -217,11 +207,11 @@ model.fit(X_train,y_train)
 predicted=model.predict(X_test)
 
 
-print(confusion_matrix(y_test,y_pred))
+# print(confusion_matrix(y_test,y_pred))
 
-print(classification_report(y_test,y_pred))
+# print(classification_report(y_test,y_pred))
 
-print(accuracy_score(y_test,y_pred))
+# print(accuracy_score(y_test,y_pred))
 
 
 # In[ ]:
@@ -232,19 +222,13 @@ results = model.predict_proba(X_test)[1]
 results
 
 
-# In[ ]:
-
-
 svm = SVC(probability=True)
 svm = SVC(kernel='linear', probability=True)
 svm.fit(X_train, y_train)
 LABEL=svm.predict(X_test)
-print(LABEL[1:10])
+# print(LABEL[1:10])
 output_proba = svm.predict_proba(X_test)
-print(output_proba)
-
-
-# In[ ]:
+# print(output_proba)
 
 
 
@@ -297,11 +281,9 @@ sapi.filter(locations=[-74.36141,40.55905,-73.704977,41.01758])
 main = pd.DataFrame(L,columns=['Tweet'])
 
 
-print(main)
-print(author)
+# print(main)
+# print(author)
 
-
-# In[ ]:
 
 
 posts=[]
@@ -332,10 +314,7 @@ for x in posts:
     refine.append(s)    
 
     
-print(refine)    
-
-
-# In[ ]:
+# print(refine)    
 
 
 
@@ -343,7 +322,7 @@ print(refine)
 re_tv_matrix = tv.transform(refine)
 re_tv_matrix = re_tv_matrix.toarray()
 
-print(re_tv_matrix)
+# print(re_tv_matrix)
 
 OUTPUT=svm.predict(re_tv_matrix)
 
@@ -351,11 +330,9 @@ OUTPUT=svm.predict(re_tv_matrix)
 SEVERITY=svm.predict_proba(re_tv_matrix)
 
 
-print(OUTPUT)
-print(SEVERITY)
+# print(OUTPUT)
+# print(SEVERITY)
 
-
-# In[ ]:
 
 
 ind=list()
@@ -365,7 +342,7 @@ for i in main['Tweet']:
         ind.append(author[index])
         
         
-print(ind)        
+# print(ind)        
 
 limit=0
 
@@ -375,8 +352,8 @@ CRIM_SCORE=[]
 CRIM_NAME=[]
 
 for i in ind:
-    print(i)
-    print(limit)
+    #print(i)
+    #print(limit)
     for po in tweepy.Cursor(api.user_timeline, screen_name=i, tweet_mode="extended",exclude='retweets').items():
         if(limit<10):
             if (not po.retweeted) and ('RT @' not in po.full_text):
@@ -437,7 +414,7 @@ for i in ind:
         x
         if(OUTPUT[j]=="Bullying"):    
             x=SEVERITY[j][0]
-            print(x)
+            #print(x,i)
             for k in range(SEVERITY_FINAL.shape[0]):
                 if SEVERITY_FINAL[k][0]>0.5:
                     #print("ADD",SEVERITY_FINAL[k][0])
@@ -448,17 +425,30 @@ for i in ind:
                     x=x-SEVERITY_FINAL[k][1]
                     #print("SUB")
                 #print(x)    
-                    break
-        CRIM_SCORE.append(x)
-        CRIM_NAME.append(i)    
-                
+                break
+            CRIM_SCORE.append(x)
+            CRIM_NAME.append(i)    
+    
             
-            
-print((CRIM_SCORE)) 
-#print((CRIM_NAME))
+    F_SCORE=[]
+    F_NAME=[]
+    for m in CRIM_SCORE: 
+        if m not in F_SCORE: 
+            F_SCORE.append(m) 
+        
+    for m in CRIM_NAME: 
+        if m not in F_NAME: 
+            F_NAME.append(m) 
+        
 
 
-# In[ ]:
+
+print((F_SCORE)) 
+print((F_NAME))
+
+
+
+
 
 
 posts_culprit=[]
@@ -489,7 +479,7 @@ for x in posts:
     refine_culprit.append(s)    
 
     
-print(refine_culprit)    
+# print(refine_culprit)    
 
 
 # In[ ]:
@@ -498,7 +488,7 @@ print(refine_culprit)
 final_tv_matrix = tv.transform(refine)
 final_tv_matrix = final_tv_matrix.toarray()
 
-print(re_tv_matrix)
+# print(re_tv_matrix)
 
 OUTPUT_FINAL=svm.predict(re_tv_matrix)
 
@@ -506,9 +496,10 @@ OUTPUT_FINAL=svm.predict(re_tv_matrix)
 SEVERITY_FINAL=svm.predict_proba(re_tv_matrix)
 
 
-print(OUTPUT_FINAL)
-print(SEVERITY_FINAL)
+# print(OUTPUT_FINAL)
+# print(SEVERITY_FINAL)
 
-for i in range(SEVERITY.shape[0]):
-    print(SEVERITY[i][0])
+# for i in range(SEVERITY.shape[0]):
+#     # print(SEVERITY[i][0])
+
 
