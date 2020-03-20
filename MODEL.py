@@ -25,6 +25,7 @@ import numpy as np
 import pandas as pd
 import nltk
 from sklearn.svm import SVC
+from conn import storedb
 
 print("HI")
 
@@ -76,7 +77,6 @@ for x in Tweet:
     c.append(s)
 
     
-print(c)
 
 
 # from sklearn.feature_extraction.text import CountVectorizer
@@ -446,23 +446,14 @@ for i in ind:
             F_NAME.append(m) 
         
 
-host = os.getenv('MYSQL_HOST')
-port = os.getenv('MYSQL_PORT')
-user = os.getenv('MYSQL_USER')
-password = os.getenv('MYSQL_PASSWORD')
-database = os.getenv('MYSQL_DATABASE')
 
 print((F_SCORE)) 
 print((F_NAME))
 
-conn=pymysql.connect(host="localhost",port=int(3306),user="root",password="",db="cyberproject",charset="latin1_swedish_ci")
-curse=conn.cursor()
 
-
-for i in range(len(F_SCORE)):
-    curse.execute("INSERT INTO tweets(name,score) into VALUES(?,?)",F_SCORE[i],F_NAME[i])
-
-conn.commit()
+#storing the f_name and f_score
+obj=storedb()
+obj.store(F_NAME,F_SCORE)
 
 
 
@@ -471,55 +462,56 @@ conn.commit()
 
 
 
-# posts_culprit=[]
-# for row in final["Tweet"]:
-#     #tokenize words
-#     words = wpt.tokenize(row)
-#     #remove punctuations
-#     clean_words = [word.lower() for word in words if word not in set(string.punctuation)]
-#     #remove stop words
-#     english_stops = nltk.corpus.stopwords.words('english')
-#     characters_to_remove = ["''",'``',"rt","https","’","“","”","\u200b","--","n't","'s","...","//t.c" ]
-#     clean_words = [word for word in clean_words if word not in english_stops]
-#     clean_words = [word for word in clean_words if word not in set(characters_to_remove)]
-#     #Lematise words
-#     lemma_list = [wordnet_lemmatizer.lemmatize(word) for word in clean_words]
-#     #print(lemma_list)
-#     posts_culprit.append(lemma_list)
+
+posts_culprit=[]
+for row in final["Tweet"]:
+    #tokenize words
+    words = wpt.tokenize(row)
+    #remove punctuations
+    clean_words = [word.lower() for word in words if word not in set(string.punctuation)]
+    #remove stop words
+    english_stops = nltk.corpus.stopwords.words('english')
+    characters_to_remove = ["''",'``',"rt","https","’","“","”","\u200b","--","n't","'s","...","//t.c" ]
+    clean_words = [word for word in clean_words if word not in english_stops]
+    clean_words = [word for word in clean_words if word not in set(characters_to_remove)]
+    #Lematise words
+    lemma_list = [wordnet_lemmatizer.lemmatize(word) for word in clean_words]
+    #print(lemma_list)
+    posts_culprit.append(lemma_list)
     
     
-# refine_culprit=[]
+refine_culprit=[]
     
-# for x in posts:
-#     s=''
-#     for y in x:
-#             s=s+' '+y
-#     s = re.sub('[^A-Za-z0-9" "]+', '', s)
-#     s=s.lstrip()
-#     refine_culprit.append(s)    
+for x in posts:
+    s=''
+    for y in x:
+            s=s+' '+y
+    s = re.sub('[^A-Za-z0-9" "]+', '', s)
+    s=s.lstrip()
+    refine_culprit.append(s)    
 
     
-# # print(refine_culprit)    
+# print(refine_culprit)    
 
 
-# # In[ ]:
+# In[ ]:
 
 
-# final_tv_matrix = tv.transform(refine)
-# final_tv_matrix = final_tv_matrix.toarray()
+final_tv_matrix = tv.transform(refine)
+final_tv_matrix = final_tv_matrix.toarray()
 
-# # print(re_tv_matrix)
+# print(re_tv_matrix)
 
-# # OUTPUT_FINAL=svm.predict(re_tv_matrix)
-
-
-# # SEVERITY_FINAL=svm.predict_proba(re_tv_matrix)
+# OUTPUT_FINAL=svm.predict(re_tv_matrix)
 
 
-# # print(OUTPUT_FINAL)
-# # print(SEVERITY_FINAL)
+# SEVERITY_FINAL=svm.predict_proba(re_tv_matrix)
 
-# # for i in range(SEVERITY.shape[0]):
-# #     # print(SEVERITY[i][0])
+
+# print(OUTPUT_FINAL)
+# print(SEVERITY_FINAL)
+
+# for i in range(SEVERITY.shape[0]):
+#     # print(SEVERITY[i][0])
 
 
